@@ -1,0 +1,10 @@
+langchain
+chromadb
+tiktoken
+langchain-google-genai
+streamlit
+langchain_community
+langchain_groq
+selenium
+webdriver-manager
+2captcha-python
