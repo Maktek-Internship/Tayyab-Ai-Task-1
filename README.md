@@ -52,7 +52,7 @@ This application allows users to interact with multiple websites by asking quest
 4. Once the URLs are processed, you can ask questions in the main area, and the app will provide answers based on the content of the websites.
 
 ## Code Overview
-    'app.py'
+**'app.py'**
 This is the main script that runs the Streamlit application. It includes functions for:
 
 - Loading and processing URLs
@@ -61,10 +61,10 @@ This is the main script that runs the Streamlit application. It includes functio
 - Displaying the Streamlit interface
 
 ### Key Functions
-- 'bypass_captcha(url)' : Handles CAPTCHA bypassing using the 2Captcha service.
-- 'process_urls(urls)' : Processes the provided URLs, crawls the content, and embeds the documents.
-- 'process_query(vectordb, query, chat_history)' : Handles user queries and retrieves answers from the embedded documents.
-- 'main()' : Sets up the Streamlit interface and handles user interactions.
+- **'bypass_captcha(url)'** : Handles CAPTCHA bypassing using the 2Captcha service.
+- **'process_urls(urls)'** : Processes the provided URLs, crawls the content, and embeds the documents.
+- **'process_query(vectordb, query, chat_history)'** : Handles user queries and retrieves answers from the embedded documents.
+- **'main()'** : Sets up the Streamlit interface and handles user interactions.
 
 ## Notes
 
