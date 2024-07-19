@@ -52,8 +52,7 @@ This application allows users to interact with multiple websites by asking quest
 4. Once the URLs are processed, you can ask questions in the main area, and the app will provide answers based on the content of the websites.
 
 ## Code Overview
-
-echo 'app.py'
+    'app.py'
 This is the main script that runs the Streamlit application. It includes functions for:
 
 - Loading and processing URLs
