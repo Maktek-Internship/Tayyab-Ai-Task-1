@@ -37,6 +37,7 @@ This application allows users to interact with multiple websites by asking quest
    ```bash
    GOOGLE_API_KEY = ""
    firecrawl_api_key = ""
+   groq_api_key = ""
 
 ## Usage
 
@@ -51,7 +52,8 @@ This application allows users to interact with multiple websites by asking quest
 4. Once the URLs are processed, you can ask questions in the main area, and the app will provide answers based on the content of the websites.
 
 ## Code Overview
-   'app.py'
+
+echo 'app.py'
 This is the main script that runs the Streamlit application. It includes functions for:
 
 - Loading and processing URLs
