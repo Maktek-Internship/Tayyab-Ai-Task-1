@@ -10,15 +10,35 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import FireCrawlLoader
 from langchain.docstore.document import Document
-from langchain_community.vectorstores import Chroma
+from langchain.vectorstores.faiss import FAISS
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from twocaptcha import TwoCaptcha
-import os
+
+# Define system template
+system_template = """Use the following pieces of context to answer the user's question.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+"""
+
+# Load environment variables
+load_dotenv()
+
+# Define message templates
+messages = [
+    SystemMessagePromptTemplate.from_template(system_template),
+    HumanMessagePromptTemplate.from_template("{question}"),
+]
+
+# Create chat prompt template
+prompt = ChatPromptTemplate.from_messages(messages)
+
+# Define constants
+ABS_PATH = os.path.dirname(os.path.abspath(__file__))
+DB_DIR = os.path.join(ABS_PATH, "db")
 
 ### Use this on line 82 only if you have 2captcha api key coz its paidddd
 def bypass_captcha(url):
@@ -50,27 +70,6 @@ def bypass_captcha(url):
         browser.find_element(By.XPATH, '//*[@id="root"]/div/main/div/section/form/button[1]').click() # Find button and copy its xpath
 
 
-# Define system template
-system_template = """Use the following pieces of context to answer the user's question.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
-"""
-
-# Load environment variables
-load_dotenv()
-
-# Define message templates
-messages = [
-    SystemMessagePromptTemplate.from_template(system_template),
-    HumanMessagePromptTemplate.from_template("{question}"),
-]
-
-# Create chat prompt template
-prompt = ChatPromptTemplate.from_messages(messages)
-
-# Define constants
-ABS_PATH = os.path.dirname(os.path.abspath(__file__))
-DB_DIR = os.path.join(ABS_PATH, "db")
-
 # Function to process URLs
 def process_urls(urls):
     url_list = [url.strip() for url in urls.split(",")]
@@ -101,19 +100,15 @@ def process_urls(urls):
     # Initialize embeddings
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
-    # Create a Chroma vector database from the documents
-    vectordb = Chroma.from_documents(
-        documents=filtered_docs,
-        embedding=embeddings,
-        persist_directory=DB_DIR,
-    )
-    vectordb.persist()
+    # Create a FAISS vector database from the documents
+    vectordb = FAISS.from_documents(documents=filtered_docs, embedding=embeddings)
+    vectordb.save_local(DB_DIR)
 
     return vectordb
 
 # Function to process query
 def process_query(vectordb, query, chat_history):
-    # Create a retriever from the Chroma vector database
+    # Create a retriever from the FAISS vector database
     retriever = vectordb.as_retriever(search_kwargs={"k": 3})
 
     # Use a Llama3-70b model
