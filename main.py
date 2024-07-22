@@ -18,6 +18,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from twocaptcha import TwoCaptcha
+import os
 
 # Define system template
 system_template = """Use the following pieces of context to answer the user's question.
@@ -25,13 +26,15 @@ If you don't know the answer, just say that you don't know, don't try to make up
 """
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 
 # Define message templates
 messages = [
     SystemMessagePromptTemplate.from_template(system_template),
     HumanMessagePromptTemplate.from_template("{question}"),
 ]
+
+os.environ["GOOGLE_API_KEY"] = "AIzaSyCMtgjCDQl7iBJsLa2iGTH0KBmsIw3UGFo"
 
 # Create chat prompt template
 prompt = ChatPromptTemplate.from_messages(messages)
@@ -78,7 +81,7 @@ def process_urls(urls):
     for url in url_list:
         ## Uncomment this line if you have api key of 2captcha
         # bypass_captcha(url) 
-        loader = FireCrawlLoader(url=url, mode="crawl")
+        loader = FireCrawlLoader(url=url, mode="crawl", api_key='fc-388f07deeea146a298d11101a40343eb')
         data = loader.load()
 
         # Split the loaded data
@@ -113,6 +116,7 @@ def process_query(vectordb, query, chat_history):
 
     # Use a Llama3-70b model
     llm = ChatGroq(
+        api_key="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",
         temperature=0,
         model="llama3-70b-8192",
     )
