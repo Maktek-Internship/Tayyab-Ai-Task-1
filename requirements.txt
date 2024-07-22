@@ -8,3 +8,4 @@ langchain_groq
 selenium
 webdriver-manager
 2captcha-python
+firecrawl-py
